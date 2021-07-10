@@ -77,18 +77,8 @@ case $host in
   ;;
 esac
 
-AC_ARG_ENABLE([c++17],
-  [AS_HELP_STRING([--disable-c++17],
-  [enable compilation in c++17 mode (disabled by default)])],
-  [use_cxx17=$enableval],
-  [use_cxx17=no])
-
-dnl Require C++11 or C++17 compiler (no GNU extensions)
-if test "x$use_cxx17" = xyes -o "x$enable_fuzz" = xyes ; then
-  AX_CXX_COMPILE_STDCXX([17], [noext], [mandatory])
-else
-  AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])
-fi
+dnl Require C++14 compiler (no GNU extensions)
+AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
 dnl Unless the user specified OBJCXX, force it to be the same as CXX. This ensures
 dnl that we get the same -std flags for both.
@@ -1341,11 +1331,11 @@ dnl Run cmake for bls-sigs (This project does not support autotools)
 AC_CONFIG_COMMANDS([src/mcl/build],
                    [rm -rf src/mcl/build/* || true && \
                     mkdir -p src/mcl/build || true && \
-                    CC=$CC \
+                    CC="$CC" \
                     CMAKE_PREFIX_PATH=$prefix \
-                    CXX=$CXX \
-                    CFLAGS=$CFLAGS \
-                    CXXFLAGS=$CXXFLAGS \
+                    CXX="$CXX" \
+                    CFLAGS="$CFLAGS" \
+                    CXXFLAGS="$CXXFLAGS" \
                     LDFLAGS=$LDFLAGS \
                     cmake -Bsrc/mcl/build -Hsrc/mcl \
                     -DMCL_USE_GMP=On \
@@ -1362,8 +1352,8 @@ AC_CONFIG_COMMANDS([src/mcl/build],
                     printf 'distdir:\n\techo\n\n' >> src/mcl/build/Makefile && \
                     printf 'distclean:\n\techo\n\n' >> src/mcl/build/Makefile],
                    [prefix="$BLS_DEPENDS"
-                    CC=$BLS_CC_RAW
-                    CXX=$BLS_CXX_RAW
+                    CC="$BLS_CC_RAW"
+                    CXX="$BLS_CXX_RAW"
                     CFLAGS=$BLS_CFLAGS
                     CXXFLAGS=$BLS_CXXFLAGS
                     BLS_CC=$BLS_CC
@@ -1400,8 +1390,8 @@ AC_CONFIG_COMMANDS([src/bls/build],
                     printf 'distdir:\n\techo\n\n' >> src/bls/build/Makefile && \
                     printf 'distclean:\n\techo\n\n' >> src/bls/build/Makefile],
                    [prefix="$BLS_DEPENDS"
-                    CC=$BLS_CC_RAW
-                    CXX=$BLS_CXX_RAW
+                    CC="$BLS_CC_RAW"
+                    CXX="$BLS_CXX_RAW"
                     CFLAGS=$BLS_CFLAGS
                     CXXFLAGS=$BLS_CXXFLAGS
                     BLS_CC=$BLS_CC

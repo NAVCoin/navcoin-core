@@ -6,10 +6,12 @@ $(package)_sha256_hash=e0a992d740709892e81f9d93f06daf305cf73fb81b545afe724780431
 $(package)_build_subdir=build_unix
 
 define $(package)_set_vars
-$(package)_config_opts=--disable-shared --enable-cxx --disable-replication --with-cryptography
+$(package)_config_opts=--disable-shared --enable-cxx --disable-replication --enable-option-checking --with-cryptography
 $(package)_config_opts_mingw32=--enable-mingw
 $(package)_config_opts_linux=--with-pic
-$(package)_cxxflags=-std=c++11
+$(package)_config_opts_android=--with-pic
+$(package)_cflags+=-Wno-error=implicit-function-declaration
+$(package)_cxxflags=-std=c++17
 $(package)_cppflags_mingw32=-DUNICODE -D_UNICODE
 endef
 
